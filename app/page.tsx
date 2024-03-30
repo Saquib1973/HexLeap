@@ -1,113 +1,165 @@
-import Image from "next/image";
+"use client";
+import Image, { StaticImageData } from "next/image";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useRef, useState } from "react";
+import img4 from "../public/3.jpeg";
+import { data, ticket } from "@/utils/utils";
+interface TicketProps {
+  image: StaticImageData;
+  location: string;
+  name: string;
+  time: string;
+  date: string;
+  day: string;
+}
+interface DataProps {
+  image: StaticImageData;
+  name: string;
+  events: number;
+  sport: string;
+}
 
 export default function Home() {
+  const ticketContainerRef = useRef<HTMLDivElement>(null);
+  const handleScroll = (scrollOffset: number) => {
+    if (ticketContainerRef.current) {
+      ticketContainerRef.current.scrollBy({
+        left: scrollOffset,
+        behavior: "smooth", // Adding smooth scroll behavior
+      });
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
+    <div>
+      {/* Sports */}
+      <div className="flex flex-col items-center justify-center md:max-w-6xl px-4 gap-6 mx-auto">
+        <div className="text-xl text font-medium inline justify-start w-full py-10 pb-6 max-md:ml-10">
+          Sports
+          <div className="h-0.5 rounded-xl w-16 bg-blue" />
+        </div>
+        <div className="flex max-md:flex-col-reverse gap-2 justify-around items-start">
+          {/* content */}
+          <div className="flex flex-col gap-4 w-full items-center">
+            <div className="flex max-lg:flex-wrap justify-start max-md:justify-center gap-3">
+              {data.map((data, i) => (
+                <DataComp key={i} {...data} />
+              ))}
+            </div>
+            <button className="mx-auto p-3 bg-blue text-white inline-block hover:bg-blue/80 rounded-sm">
+              See More
+            </button>
+          </div>
+          {/* ad */}
+          <div className="bg-[#FFFFFF] rounded-sm flex flex-col items-start justify-start gap-2 dark:bg-[#3B3E47] p-3 max-md:mx-10 md:max-w-[20%] h-[400px]">
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+              src={img4}
+              alt="logo"
+              className="h-48 w-48 object-cover mx-auto"
             />
-          </a>
+            <p className="text">Advertisement title</p>
+            <p className="text-xs text overflow-y-auto">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem
+              ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
         </div>
       </div>
+      {/* Highlights */}
+      <div className="bg-black dark:bg-white mx-2 md:mx-40 xl:mx-52 2xl:mx-80 my-10 max-lg:px-2 p-8 rounded-md">
+        <p className="text-4xl font-semibold text-white dark:text-black text-center">
+          Collection Spotlight
+        </p>
+        <p className="text text-xs mx-auto text-white dark:text-black text-center mt-2 md:w-[50%]">
+          Discover extraordinary moments with our Spotlight Collection
+          metatickets—exclusive access to premium events for an unforgettable
+          experience. Grab yours today!
+        </p>
+        <div className="flex justify-between gap-2 items-center mt-6 overflow-x-auto">
+          <ArrowLeftIcon
+            className="size-14 max-md:size-20 border-2 border-blue text-blue cursor-pointer p-1 "
+            onClick={() => handleScroll(-150)}
+          />
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+          <div
+            ref={ticketContainerRef}
+            id="ticketContainer"
+            className="flex gap-6 p-6 snap-x-mandatory overflow-x-auto"
+            style={{ maxWidth: "90vw" }}
+          >
+            {ticket.map((ticketProps, i) => (
+              <Ticket key={i} {...ticketProps} />
+            ))}
+          </div>
+          <ArrowRightIcon
+            className="size-14 max-md:size-20 border-2 border-blue text-blue cursor-pointer p-1 "
+            onClick={() => handleScroll(150)}
+          />
+        </div>
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
 }
+const DataComp: React.FC<DataProps> = ({ image, name, events, sport }) => {
+  return (
+    <div className="bg-[#FFFFFF] rounded-sm max-lg:w-[30%] max-md:w-[45%] h-[400px] w-full flex flex-col gap-2 dark:bg-[#3B3E47] p-3">
+      <Image
+        src={image}
+        alt="logo"
+        className="h-72 w-48 object-cover mx-auto"
+      />
+      <p className="line-clamp-1 text">{name}</p>
+      <div className="dark:bg-black bg-white rounded-sm p-2 flex justify-between">
+        <div className="text-xs text-black dark:text-white">
+          <p className="text-xs text-black/60 dark:text-white/60">
+            Total Events
+          </p>
+          {events}
+        </div>
+        <div className="text-xs text-black dark:text-white">
+          <p className="text-xs text-black/60 dark:text-white/60">Sport</p>
+          {sport}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Ticket: React.FC<TicketProps> = ({
+  image,
+  location,
+  name,
+  time,
+  date,
+  day,
+}) => {
+  return (
+    <div
+      className="flex flex-col items-center dark:bg-black bg-white py-4 pb-2 rounded-md shadow-md snap-start"
+      style={{ minWidth: "200px" }}
+    >
+      <Image
+        src={image}
+        alt="ticket"
+        className="h-60 w-32 object-cover rounded-md"
+      />
+      <div className="relative w-full mt-4">
+        <div className="dark:bg-white bg-black size-4 rounded-full absolute -left-2 -translate-y-1/2 " />
+        <hr className="border-dashed border-0.5 border-black/40 w-full" />
+        <div className="dark:bg-white bg-black size-4 rounded-full absolute -right-2 -translate-y-1/2 " />
+      </div>
+      <div className="mx-4 flex flex-col items-center justify-center">
+        <p className="text-sm font-semibold text">{name}</p>
+        <p className="text-xs text">
+          {day}, {date} - {time}
+        </p>
+        <p className="text-xs tracking-tight text text-center">{location}</p>
+        <button className="text-xs m-1 rounded-sm px-2 bg-black text-white p-1">
+          Take Flight Collection
+        </button>
+      </div>
+    </div>
+  );
+};
